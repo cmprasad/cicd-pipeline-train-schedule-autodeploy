@@ -70,6 +70,5 @@ pipeline {
                  sshagent(credentials: ['sshcreds']) {
                         sh "ssh cloud_user@10.0.1.101 "kubectl apply -f /home/cloud_user/train-schedule-kube-canary.yml""
                  }
-        }
-    }
+   }
 
