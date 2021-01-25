@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         //be sure to replace "willbla" with your own Docker Hub username
-        DOCKER_IMAGE_NAME = "prasadcm/train-schedule"
+        DOCKER_IMAGE_NAME = "willbla/train-schedule"
     }
     stages {
         stage('Build') {
@@ -64,11 +64,16 @@ pipeline {
                 input 'Deploy to Production?'
                 milestone(1)
                 kubernetesDeploy(
-                    //kubeconfigId: 'kubeconfig',
-                    //configs: 'train-schedule-kube-canary.yml',
-                    //enableConfigSubstitution: true
-                 sshagent(credentials: ['sshcreds']) {
-                        sh "ssh cloud_user@10.0.1.101 "kubectl apply -f /home/cloud_user/train-schedule-kube-canary.yml""
-                 }
-   }
-
+                    kubeconfigId: 'kubeconfig',
+                    configs: 'train-schedule-kube-canary.yml',
+                    enableConfigSubstitution: true
+                )
+                kubernetesDeploy(
+                    kubeconfigId: 'kubeconfig',
+                    configs: 'train-schedule-kube.yml',
+                    enableConfigSubstitution: true
+                )
+            }
+        }
+    }
+}
