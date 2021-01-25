@@ -67,8 +67,8 @@ pipeline {
                     //kubeconfigId: 'kubeconfig',
                     //configs: 'train-schedule-kube-canary.yml',
                     //enableConfigSubstitution: true
-                 script {
-                        sh "sshpass -p 'XYVcMlnYCs' -v ssh cloud_user@10.0.1.101 "kubectl apply -f /home/cloud_user/train-schedule-kube-canary.yml""
+                 sshagent(credentials: ['sshcreds']) {
+                        sh "ssh cloud_user@10.0.1.101 "kubectl apply -f /home/cloud_user/train-schedule-kube-canary.yml""
                 )
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
